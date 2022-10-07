@@ -1,0 +1,29 @@
+Lecture Room-1
+Lecture Room-2
+Lecture Room-3
+Room-101
+Room-102
+Room-111
+Drafting Lab-1
+Drafting Lab-2
+Computer Lab-1
+Print Lab-1
+Print Lab-2
+Computer Lab-2
+Model Lab
+Fashion Thesis Lab-2
+Textile Thesis Lab
+Interior Thesis Lab
+Main Fashion Thesis Lab 
+Embellishment Lan
+Drawing Hall
+Sound Lab
+Sewing Lab
+Lighting Studio
+Illustration Hall
+Interior Lab
+Weaving Lab
+GPCL
+Programming Lab-1
+Programming Lab-2
+Terrace

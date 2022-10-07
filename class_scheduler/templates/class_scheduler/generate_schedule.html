@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+<html lang="en">
+{% block content %}
+    <head>
+        <meta charset="UTF-8">
+        <title>Class Scheduler</title>
+        <style>
+        table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 50%;
+        }
+
+        td, th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+        }
+
+        tr:nth-child(even) {
+          background-color: #dddddd;
+        }
+
+        .main_heading{
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgb(145, 145, 219);
+            margin-right: 200px;
+            margin-left: 200px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+        }
+
+        .sub_heading{
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgb(145, 219, 145);
+            font-size: 32px;
+            padding-left: 200px;
+            padding-right: 200px;
+            border-radius: 15px;
+        }
+
+        .sub_heading_container{
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            border-radius: 15px;
+        }
+
+        .table-room{
+            margin: 0;
+            display: flex;
+            flex: 1;
+            margin: 0;
+            margin-right: 20px;
+            margin-left: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .forms-format{
+            display: flex;
+            flex-direction: row;
+            width: 900px;
+            height: 40px;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: 700;
+            padding-left: 20px;
+            margin-bottom: 15px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bts{
+            padding-top: 13px;
+            padding-bottom: 13px;
+            border-radius: 7px;
+            font-size: 30px;
+            width: 230px;
+            background-color: black;
+            color: rgba(33,154,199,255);
+            margin-right: 5px;
+            cursor: pointer;
+            transition: color 0.15s;
+          }
+
+          .bts:hover {
+            color: pink;
+            cursor: pointer;
+          }
+
+          .bts:active {
+            color: rgb(118, 219, 145);
+            cursor: pointer;
+          }
+
+        .button_place{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            margin-top: 50px;
+
+        }
+
+        .success-message{
+            margin-top: 50px;
+            font-size: 50px;
+            font-weight: 700;
+            font-style: italic;
+            color: rgb(0, 120, 0);
+        }
+
+        .scheduler{
+            display: flex;
+            flex-direction: row;
+            margin-top: 24px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .success, .room_busy, .teacher_busy {
+            margin: 15px;
+            padding: 0;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 200px;
+            display: flex;
+            flex-direction: row;
+            flex: 1;
+            font-size: 25px;
+            background-color: rgb(255,242,204);
+            color: rgb(0,0,0);
+            border-radius: 15px;
+            -webkit-animation: cssAnimation 0s ease-in 3s forwards;
+            -webkit-animation-fill-mode: forwards;
+            animation-fill-mode: forwards;
+        }
+        .success {
+            background-color: rgb(255,242,204);
+            color: rgb(0,0,0);
+        }
+        .room_busy {
+            background-color: rgb(255,20,20);
+            color: rgb(255,255,255);
+        }
+        .teacher_busy {
+            background-color: rgb(255,20,20);
+            color: rgb(255,255,255);
+        }
+        @keyframes cssAnimation {
+            to {
+                width:0;
+                height:0;
+                margin:0;
+                overflow:hidden;
+                background-color: rgb(255,255,255);
+            }
+        }
+        @-webkit-keyframes cssAnimation {
+            to {
+                width:0;
+                height:0;
+                margin: 0;
+                visibility:hidden;
+            }
+        }
+
+        .delete_item{
+            background-color: rgb(255,255,255);
+            color: rgb(204,0,0);
+            border-style: solid;
+            border-width: 2px;
+            border-color: rgb(204, 0, 0);
+            font-size: 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            padding-right: 20px;
+            padding-left: 20px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            cursor: pointer;
+        }
+
+        .delete_item:hover{
+            background-color: rgb(204,0,0);
+            color: rgb(255,255,255);
+        }
+
+        .delete_item:active{
+            background-color: rgb(255,255,255);
+            border-color: rgb(0, 0, 0);
+            color: rgb(0,0,0);
+        }
+
+        .login_button{
+            padding-top: 13px;
+            padding-bottom: 13px;
+            padding-left: 10px;
+            padding-right: 10px;
+            border-radius: 7px;
+            font-size: 30px;
+            background-color: white;
+            color: rgba(33,154,199,255);
+            border: 2px;
+            border-style: solid;
+            border-color: rgba(33,154,199,255);
+            cursor: pointer;
+            transition: color 0.15s;
+            text-decoration: none;
+          }
+
+          .login_button:hover{
+            background-color: rgba(33,154,199,255);
+            color: white;
+          }
+
+          .parent {
+            height: 100%;
+            background: rgb(255, 255, 255);
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            }
+
+        .child {
+            height: 50%;
+            width: 50%;
+            background: rgb(255, 255, 255);
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            }
+
+        .heading{
+            display: flex;
+            flex: 1
+            font-size: 60px;
+        }
+
+        .form-container{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        </style>
+    <title>HTML Elements Reference</title>
+    </head>
+    <body>
+    {% if user.is_authenticated %}
+        {% if narration == "Entry Done" %}
+          <div class="success">
+            {{ narration }}
+          </div>
+        {% elif narration == "Room Busy" %}
+          <div class="room_busy">
+            {{ narration }}
+          </div>
+        {% elif narration == "Teacher Busy" %}
+          <div class="teacher_busy">
+            {{ narration }}
+          </div>
+        {% endif %}
+      <div class="main_heading">
+        <h1 class="heading">Generate Schedule</h1>
+      </div>
+      <div class="sub_heading_container">
+          <div class="sub_heading">
+              Dated:
+            {{ date }}
+          </div>
+      </div>
+    <div class="form-container">
+         <form action="" method=POST>
+              <div class="spacing1">
+                  {% csrf_token %}
+                  <select class="forms-format" id="teacher_name_subject" name="teacher_name_subject">
+                    {% for value in user_teacher %}
+                       <option value="{{value}}">{{value}}</option>
+                    {% endfor %}
+                  </select>
+                  <select class="forms-format" id="room_name" name="room_name">
+                    {% for value in user_room %}
+                       <option value="{{value}}">{{value}}</option>
+                    {% endfor %}
+                  </select>
+                  <select class="forms-format"  id="time_slot" name="time_slot">
+                    {% for value in user_timeslot %}
+                       <option value="{{value}}">{{value}}</option>
+                    {% endfor %}
+                  </select>
+              </div>
+              <div class="button_place">-->
+                <input type="submit" value="ADD" class="bts">
+              </div>
+        </form>
+    </div>
+      <div class="scheduler">
+         <table>
+              <tr>
+                <th>Date</th>
+                <th>Teacher</th>
+                <th>Subject</th>
+                <th>Time Slot</th>
+                <th>Room</th>
+                <th>Delete</th>
+              </tr>
+                {% for value in schedule %}
+                   <tr>
+                    <td>{{value.0}}</td>
+                    <td>{{value.1}}</td>
+                    <td>{{value.2}}</td>
+                    <td>{{value.3}}</td>
+                    <td>{{value.4}}</td>
+                    <td>
+                        <a href="{% url 'delete_entry' value.5 %}" class="delete_item">Delete</a>
+                    </td>
+                  </tr>
+                {% endfor %}
+        </table>
+      </div>
+        {% else %}
+            <div class="parent">
+                <div class="child">
+                    <div class="">
+                        <h1 class="heading">!!! You must Login To Work / View Database !!!</h1>
+                    <div class="button_place">
+                        <a class="login_button" href="{% url 'login_users' %}">Login</a>
+                    </div>
+                </div>
+
+        {% endif %}
+    </body>
+{% endblock %}
+</html>

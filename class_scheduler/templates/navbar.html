@@ -1,0 +1,175 @@
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Michroma&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+      body{
+        margin: 0;
+      }
+
+      .top-bar, .welcome{
+        color: white;
+        background-color: black;
+        font-weight: bold;
+        padding-left: 30px;
+        padding-bottom: 2px;
+        margin-top: 18px;
+        font-size: 40px;
+      }
+
+      .top-bar{
+        font-family: Dancing Script;
+      }
+
+      .welcome{
+        font-family: Helvetica;
+      }
+
+      .top-div{
+         display: flex;
+         flex-direction: row;
+         background-color: black;
+         height: 85px;
+      }
+
+      .sub-div-heading{
+        width:100%;
+      }
+
+      .sub-div-buttons{
+        display: flex;
+        flex: 1;
+        justify-content: end;
+      }
+
+      .standard-buttons{
+        padding-top: 13px;
+        padding-bottom: 13px;
+        font-family: Michroma;
+        font-size: 22px;
+        background-color: black;
+        color: rgba(33,154,199,255);
+        margin-right: 5px;
+        cursor: pointer;
+        transition: color 0.15s
+      }
+
+      .standard-buttons:hover {
+        color: pink;
+        cursor: pointer;
+      }
+
+      .standard-buttons:active {
+        color: rgb(118, 219, 145);
+        cursor: pointer;
+      }
+
+      .button_position {
+        height: 55px;
+        width: 125px;
+        margin-top: 25px;
+      }
+
+      .log-out-buttons{
+        font-family: Michroma;
+        font-size: 22px;
+        background-color: red;
+        color: white;
+        margin-right: 5px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: color 0.15s
+        color: inherit;
+        text-decoration: none;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+      }
+
+      .log-out-buttons:hover {
+        color: black;
+      }
+
+      .log-out-buttons:active {
+        background-color: white;
+        color: red;
+      }
+
+    .dropbtn {
+      background-color: #04AA6D;
+      color: white;
+      padding: 16px;
+      font-size: 16px;
+      border: none;
+    }
+
+    .dropdown {
+      margin: 0;
+      margin-top: 12px;
+      position: flex;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f1f1f1;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content a:hover {background-color: #ddd;}
+
+    .dropdown:hover .dropdown-content {display: block;}
+
+    .dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+
+    </style>
+</head>
+{% if user.is_authenticated %}
+<div class="top-div">
+    <div class="sub-div-heading">
+        <h1 class="top-bar">Class Scheduler</h1>
+    </div>
+    <div class="sub-div-heading">
+        <h1 class="welcome">Hi, {{ user.get_username }}</h1>
+    </div>
+    <div class="sub-div-buttons">
+        <div class="dropdown">
+          <button class="standard-buttons">Register</button>
+          <div class="dropdown-content">
+            <a href="{% url 'view_teachers' %}">View Teachers</a>
+            <a href="{% url 'view_rooms' %}">View Rooms</a>
+            <a href="{% url 'view_timeslots' %}">View Time Slots</a>
+            <a href="{% url 'add_teachers' %}">Add Teachers</a>
+            <a href="{% url 'add_rooms' %}">Add Rooms</a>
+            <a href="{% url 'add_timeslots' %}">Add Time Slots</a>
+            <a href="{% url 'modify_teacher_list' %}">Modify Teachers</a>
+            <a href="{% url 'modify_room_list' %}">Modify Rooms</a>
+            <a href="{% url 'modify_timeslot_list' %}">Modify Time Slots</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="standard-buttons">Schedule</button>
+          <div class="dropdown-content">
+            <a href="{% url 'select_date_to_generate' %}">Generate Timetable</a>
+            <a href="{% url 'view_schedule' %}">View Timetable</a>
+            <a href="{% url 'delete_schedule_list' %}">Delete Timetable</a>
+          </div>
+        </div>
+        <div class="button_position">
+            <a href="{% url 'logout_users' %}" type="button" class="log-out-buttons">logout</a>
+        </div>
+    </div>
+</div>
+{% else %}
+{% endif %}

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+<html lang="en">
+{% block content %}
+    <head>
+        <meta charset="UTF-8">
+        <title>Class Scheduler</title>
+<!--        <style>-->
+<!--            .heading{-->
+<!--            color: red;-->
+<!--            }-->
+<!--        </style>-->
+    </head>
+    <style>
+        .button_place{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            padding-right: 20px;
+        }
+
+        .login_button{
+            padding-top: 13px;
+            padding-bottom: 13px;
+            padding-left: 10px;
+            padding-right: 10px;
+            border-radius: 7px;
+            font-size: 30px;
+            background-color: white;
+            color: rgba(33,154,199,255);
+            border: 2px;
+            border-style: solid;
+            border-color: rgba(33,154,199,255);
+            cursor: pointer;
+            transition: color 0.15s;
+            text-decoration: none;
+          }
+
+          .login_button:hover{
+            background-color: rgba(33,154,199,255);
+            color: white;
+          }
+
+          .sign{
+            padding: 0;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid black;
+            margin-top: 50px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            width: 50%;
+            border-radius: 7px;
+          }
+
+          .main{
+            padding: 0;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .allSides{
+              margin: auto;
+              width: 60%;
+              width:99%; height:99%;
+              border: solid 1px #555;
+              border-radius: 7px;
+              background-color: white;
+              align-items: center;
+              justify-content: center;
+              box-shadow:  0 0 10px  rgba(0,0,0,0.6);
+              -moz-box-shadow: 0 0 10px  rgba(0,0,0,0.6);
+              -webkit-box-shadow: 0 0 10px  rgba(0,0,0,0.6);
+              -o-box-shadow: 0 0 10px  rgba(0,0,0,0.6);
+            }
+
+            .heading{
+                padding-left: 10px;
+            }
+
+            .description{
+                font-size: 20px;
+                font-family: sans-serif;
+                padding-left: 25px;
+                padding-right: 25px;
+            }
+
+            .features{
+                font-size: 18px;
+                font-family: arial;
+                padding-left: 25px;
+                padding-right: 25px;
+            }
+    </style>
+    <body>
+    {% if user.is_authenticated %}
+        <br>
+    {% else %}
+    {% endif%}
+      <div class="allSides">
+          <h1 class="heading">Class Scheduler :-</h1>
+          <div class="description">
+            A simple "Time Table" app. You can easily add teachers with subjects, time slots and rooms. It prompts error if the teacher is busy on that time or the room is busy on that time. So you don't need to worry about these mistakes.
+          </div>
+          <div class="features">
+               <ul>&bull;&nbsp;Add and modify Teachers, Room, Time Slots</ul>
+               <ul>&bull;&nbsp;Download PDF</ul>
+               <ul>&bull;&nbsp;Download Excel File</ul>
+               <ul>&bull;&nbsp;Stores the Time Table</ul>
+               <ul>&bull;&nbsp;Modify The Time Table Any Time</ul>
+          </div>
+          {% if user.is_authenticated %}
+          {% else %}
+          <div class="main">
+              <div class="sign">
+                <div class="button_place">
+                    <a class="login_button" href="{% url 'login_users' %}">Sign In</a>
+                </div>
+                <div class="button_place">
+                    Or
+                </div>
+                <div class="button_place">
+                    <a class="login_button" href="{% url 'register_user' %}">Sign Up</a>
+                </div>
+              </div>
+          </div>
+      </div>
+      {% endif%}
+    </body>
+{% endblock %}
+</html>
