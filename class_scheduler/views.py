@@ -1,8 +1,10 @@
+import os.path
+import openpyxl as xl
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponseRedirect, FileResponse, HttpResponse
-from .models import Teacher, Room, TimeSlot, TimeTable
-from .forms import TeacherForm, RoomForm, TimeSlotForm, TimeTableForm
+from .models import Teacher, Room, TimeSlot, TimeTable, UploadFile
+from .forms import TeacherForm, RoomForm, TimeSlotForm, TimeTableForm, UploadFileForm, TemporaryHoldTimeTable, FinalHoldTimeTable
 from datetime import timedelta, datetime
 from .pdf_report import generate_pdf_report
 from .excel_report import excel
@@ -32,11 +34,6 @@ def setting_minutes(x):
     return fixed
 
 
-def global_narration(x):
-    narration = x
-    return narration
-
-
 def evaluate(saved_date, time_slot, x):
     evaluated = False
     current_start_hour = (int(str(time_slot[0]).split(":")[0]), int(str(time_slot[0]).split(":")[1]), 0)
@@ -55,6 +52,60 @@ def evaluate(saved_date, time_slot, x):
                 else:
                     evaluated = False
     return evaluated
+
+
+def delete_old_uploads():
+    for key in UploadFile.objects.all():
+        UploadFile.objects.get(pk=key.pk).delete()
+    for key in TemporaryHoldTimeTable.objects.all():
+        TemporaryHoldTimeTable.objects.get(pk=key.pk).delete()
+    for key in FinalHoldTimeTable.objects.all():
+        FinalHoldTimeTable.objects.get(pk=key.pk).delete()
+    files = os.listdir('uploads/')
+    for item in files:
+        os.remove('uploads/' + item)
+
+
+def setting_table_fixer(request):
+    username = request.user.username
+    date_complete = str(datetime.now()).split(".")
+    date_and_time = date_complete[0].split(" ")
+    date = date_and_time[0]
+    files = os.listdir('uploads/')
+    for item in files:
+        filename = item
+    location = 'uploads/' + filename
+    wb = xl.load_workbook(location, data_only=True)
+    sheet = wb.worksheets[0]
+
+    # fetching common subjects
+    subjects = []
+
+    for row in range(2, sheet.max_row + 1):
+        subject = sheet.cell(row, 2)
+        if subject.value not in subjects:
+            subjects.append(subject.value)
+
+    # Fetching each subject time to analyse
+    final_selection = []
+    for item in subjects:
+        start_time = "get value"
+        for row in range(1, sheet.max_row + 1):
+            subject = sheet.cell(row, 2)
+            # Fixing Double Entries Because OF Break Up Time Slots
+            if subject.value == item:
+                time = sheet.cell(row, 1)
+                if start_time == "get value":
+                    start_time = str(time.value).split(" - ")[0]
+                end_time = str(time.value).split(" - ")[1]
+                correct_time = start_time + " - " + end_time
+                teacher = sheet.cell(row, 3)
+        final_selection.append(str(correct_time).replace(" - ", " TO ") + " ----- " + str(item) + " ----- " + str(teacher.value))
+    for item in sorted(final_selection, reverse=False):
+        values = str(item).split(" ----- ")
+        b = TemporaryHoldTimeTable(date=str(date), entry_user=str(username), teacher_name_subject=str(values[2]) + " - (" + str(values[1] + ")"),
+                      time_slot=str(values[0]))
+        b.save()
 
 
 
@@ -436,6 +487,111 @@ def delete_timeslot(request, time_id):
     entry.delete()
     messages.info(request, ("Entry Deleted..."))
     return redirect('modify_timeslot_list')
+
+
+# Time Table Fixer Under Development
+def time_table_fixer(request):
+    if request.method == "POST":
+        form = UploadFileForm(request.POST, request.FILES)
+        extension = os.path.splitext(str(request.FILES['file']))[1]
+        if form.is_valid():
+            delete_old_uploads()
+            if str(extension) == ".xlsx":
+                newdoc = UploadFile(file=request.FILES['file'])
+                newdoc.save()
+                messages.info(request, (str(request.FILES['file'])) + " - File Uploaded Successfully")
+                setting_table_fixer(request)
+            else:
+                messages.warning(request, (str(request.FILES['file'])) + " is not a valid excel (xlsx) file")
+        return redirect('generate_fix_schedule')
+    else:
+        form = UploadFileForm
+    return render(request, 'class_scheduler/time_table_fixer.html', {'form': form})
+    # return render(request, 'class_scheduler/time_table_fixer.html', {})
+
+def generate_fix_schedule(request):
+    username = request.user.username
+    # f = open("text.txt", "r")   # Fetching Date From Preivous Page
+    # saved_date = f.read()
+    # f.close()
+    saved_date = "2022-10-08"
+    teacher = ""
+    time_slot = ""
+    room = ""
+    status = False
+    narration = "Entry Done"
+    schedule = FinalHoldTimeTable.objects.filter(entry_user=str(username))  # As we have joined Teacher and Subject name we break them so that they can be shown in different columns
+    user_teacher = Teacher.objects.filter(entry_user=str(username))
+    user_room = Room.objects.filter(entry_user=str(username))
+    user_timeslot = TimeSlot.objects.filter(entry_user=str(username))
+    schedule_fixed = []
+    for i in schedule:
+        if str(saved_date) == str(i.date):
+            pk = i.pk
+            if i.room_name is not None:
+                room = i.room_name
+            else:
+                room = "Room Removed"
+            if i.time_slot is not None:
+                time = str(i.time_slot)
+            else:
+                time = "TimeSlot Removed"
+            if i.teacher_name_subject is not None:
+                split_teacher_subject = str(i.teacher_name_subject).split(" - (")
+                teacher = split_teacher_subject[0]
+                subject = split_teacher_subject[1][:-1]
+            else:
+                teacher = "Teacher Removed"
+                subject = "Subject Removed"
+            date = i.date
+            time_table = (date, teacher, subject, time, room, pk)
+            schedule_fixed.append(time_table)
+    if request.method == "POST":
+        # form = TimeTableForm()
+        for key in request.POST:        # For Evaluation that either room or teacher is busy
+            if key == "teacher_name_subject":
+                teacher_subject = str(request.POST[key]).split(" - (")
+                teacher = teacher_subject[0]
+                full_teacher_subject = str(request.POST[key])
+            if key == "time_slot":
+                time_slot = str(request.POST[key]).split(" TO ")
+                full_time_slot = str(request.POST[key])
+            if key == "room_name":
+                room = str(request.POST[key])
+        for i in TimeTable.objects.filter(entry_user=str(username)):
+            if str(saved_date) == str(i.date):
+                if str(teacher) == str(i.teacher_name_subject).split(" - (")[0]:
+                    if evaluate(saved_date, time_slot, teacher) is True:
+                        status = True
+                        narration = "Teacher Busy"
+                        break
+                elif str(room) == str(i.room_name):
+                    if evaluate(saved_date, time_slot, room) is True:
+                        status = True
+                        narration = "Room Busy"
+                        break
+        if status is False:
+            b = FinalHoldTimeTable(date=str(saved_date), entry_user=str(username), teacher_name_subject=str(full_teacher_subject), room_name=str(room), time_slot=str(full_time_slot))
+            b.save()
+            messages.success(request, ("Entry Done"))
+        else:
+            if narration == "Teacher Busy":
+                messages.warning(request, (teacher + " is busy"))
+            else:
+                messages.warning(request, (str(room) + " is busy"))
+        return redirect('generate_fix_schedule')
+    else:
+        teacher_subject = []
+        room_name = []
+        time_slot = []
+        for value in TemporaryHoldTimeTable.objects.all():
+            teacher_subject.append(value.teacher_name_subject)
+            if value.time_slot not in time_slot:
+                time_slot.append(value.time_slot)
+        for value in Room.objects.filter(entry_user=str(username)):
+            room_name.append(value.name)
+        return render(request, 'class_scheduler/generate_fix_schedule.html', {'teacher_subject': teacher_subject, 'time_slot': time_slot, 'room_name': room_name, 'schedule': Sort_Tuple(schedule_fixed), 'date': saved_date, 'user_teacher': user_teacher, 'user_room': user_room, 'user_timeslot': user_timeslot})
+
 
 
 def home(request):

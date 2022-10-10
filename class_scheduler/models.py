@@ -46,4 +46,31 @@ class TimeTable(models.Model):
 
     def __str__(self):
         return str(self.date)
-#
+
+
+class UploadFile(models.Model):
+    # file will be uploaded to MEDIA_ROOT/uploads
+    file = models.FileField(upload_to='uploads/')
+
+
+# Time Table Fixer Table Below (Under Development
+
+class TemporaryHoldTimeTable(models.Model):
+    date = models.DateField('Schedule Date', null=True)
+    teacher_name_subject = models.CharField("Teacher", null=True, max_length=120)
+    time_slot = models.CharField("TimeSlot", null=True, max_length=120)
+    entry_user = models.CharField('entry_user', max_length=120)
+
+    def __str__(self):
+        return str(self.date)
+
+
+class FinalHoldTimeTable(models.Model):
+    date = models.DateField('Schedule Date', null=True)
+    teacher_name_subject = models.CharField("Teacher", null=True, max_length=120)
+    time_slot = models.CharField("TimeSlot", null=True, max_length=120)
+    room_name = models.CharField("Room", null=True, max_length=120)
+    entry_user = models.CharField('entry_user', max_length=120)
+
+    def __str__(self):
+        return str(self.date)

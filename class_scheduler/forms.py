@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Teacher, Room, TimeSlot, TimeTable
+from .models import Teacher, Room, TimeSlot, TimeTable, UploadFile, TemporaryHoldTimeTable, FinalHoldTimeTable
 
 
 class TeacherForm(ModelForm):
@@ -52,6 +52,55 @@ class TimeSlotForm(ModelForm):
 class TimeTableForm(ModelForm):
     class Meta:
         model = TimeTable
+        fields = ("date", "teacher_name_subject", "time_slot", "room_name", "entry_user")
+        labels = {
+            'date': "",
+            "teacher_name_subject": "",
+            "time_slot": "",
+            "room_name": "",
+            "entry_user": "",
+        }
+
+        widgets = {
+            'date': forms.HiddenInput(attrs={'class': 'forms-format', 'placeholder': "Enter Date", 'id': "store_date", 'name': "store_date"}),
+            'teacher_name_subject': forms.Select(attrs={'class': 'forms-format',}),
+            'time_slot': forms.Select(attrs={'class': 'forms-format', 'placeholder': "Select Time"}),
+            'room_name': forms.Select(attrs={'class': 'forms-format', 'placeholder': "Select Room"}),
+            'entry_user': forms.HiddenInput(attrs={'class': 'forms-format', 'name': "user",}),
+        }
+
+
+class UploadFileForm(forms.Form):
+    file = forms.FileField()
+    # title = forms.CharField(max_length=50)
+    # file = forms.FileField()
+
+
+# Time Table Fixer Table Below (Under Development
+
+class TemporaryHoldTimeTableForm(ModelForm):
+    class Meta:
+        model = TemporaryHoldTimeTable
+        fields = ("date", "teacher_name_subject", "time_slot", "entry_user")
+        labels = {
+            'date': "",
+            "teacher_name_subject": "",
+            "time_slot": "",
+            "room_name": "",
+            "entry_user": "",
+        }
+
+        widgets = {
+            'date': forms.HiddenInput(attrs={'class': 'forms-format', 'placeholder': "Enter Date", 'id': "store_date", 'name': "store_date"}),
+            'teacher_name_subject': forms.Select(attrs={'class': 'forms-format',}),
+            'time_slot': forms.Select(attrs={'class': 'forms-format', 'placeholder': "Select Time"}),
+            'entry_user': forms.HiddenInput(attrs={'class': 'forms-format', 'name': "user",}),
+        }
+
+
+class FinalHoldTimeTableForm(ModelForm):
+    class Meta:
+        model = FinalHoldTimeTable
         fields = ("date", "teacher_name_subject", "time_slot", "room_name", "entry_user")
         labels = {
             'date': "",

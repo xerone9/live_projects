@@ -27,4 +27,7 @@ urlpatterns = [
     path('modify_timeslot', views.modify_timeslot_list, name='modify_timeslot_list'),
     path('modify_timeslot/<time_id>', views.edit_timeslot, name='edit_timeslot'),
     path('delete_timeslot/<time_id>', views.delete_timeslot, name='delete_timeslot'),
+    # Below URLs are under development
+    path('time_table_fixer', views.time_table_fixer, name='time_table_fixer'),
+    path('generate_fix_schedule', views.generate_fix_schedule, name='generate_fix_schedule'),
 ]
