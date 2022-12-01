@@ -80,8 +80,7 @@
       {% for message in messages %}
         <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
       {% endfor %}
-     </div>
-    {% endif %}
+
 
     {% block content %}
         <h1>Hello, world!</h1>

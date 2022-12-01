@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'class_scheduler',
     'members',
+    'amount_translator',
 ]
 
 MIDDLEWARE = [
