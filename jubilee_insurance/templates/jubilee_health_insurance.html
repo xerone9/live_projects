@@ -1,0 +1,465 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<script>
+    function toggleDivs() {
+            var div1 = document.getElementById('div1');
+            var div2 = document.getElementById('div2');
+            var claimantNameField = document.getElementById('claimant_name');
+
+            // Check if the claimant name field has a value
+            if (claimantNameField.value) {
+                div1.style.display = 'none';
+                div2.style.display = 'block';
+            } else {
+                div1.style.display = 'block';
+                div2.style.display = 'none';
+            }
+
+            // Store the value of the claimant name field
+            localStorage.setItem('claimantName', claimantNameField.value);
+
+            // Check if div2 has a value and hide div1 accordingly
+            if (div2.innerText.trim() !== "") {
+                div1.style.display = 'none';
+            }
+        }
+
+        // Initialize the divs based on stored data
+        document.addEventListener('DOMContentLoaded', function () {
+            var div1 = document.getElementById('div1');
+            var div2 = document.getElementById('div2');
+            var claimantNameField = document.getElementById('claimant_name');
+
+            // Check if the claimant name field has a value
+            if (claimantNameField.value) {
+                div1.style.display = 'none';
+                div2.style.display = 'block';
+            } else {
+                div1.style.display = 'block';
+                div2.style.display = 'none';
+            }
+        });
+</script>
+<script>
+    function validateForm() {
+        var requiredFields = [
+            "company_name",
+            "claimant_name",
+            "claimant_father_name",
+            "claimant_full_name",
+            "date_of_birth",
+            "cnic",
+            "policy_number",
+            "insurance_number",
+            "illness",
+            "symptoms_occur",
+            "last_working_day",
+            "hospital_name",
+            "doctor_name",
+            "claim_amount"
+        ];
+
+        for (var i = 0; i < requiredFields.length; i++) {
+            var fieldName = requiredFields[i];
+            var fieldValue = document.getElementById(fieldName).value.trim();
+            if (fieldValue === "") {
+                alert("Field '" + fieldName + "' is empty. Please fill in all required fields.");
+                return false; // Prevent form submission
+            }
+        }
+        return true; // Allow form submission if all fields are filled
+    }
+</script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jubilee Health Insurance</title>
+    <style>
+        /* Reset default margin and padding */
+        body, html {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(90deg, rgba(250,249,246,1) 0%, rgba(250,249,246,1) 15%, rgba(206,21,63,1) 41%); /* Light gray background for the entire page */
+        }
+
+        /* Header styles */
+        /* Header styles */
+        header {
+            background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 15%, rgba(206,21,63,1) 41%);
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between; /* Space between the images */
+        }
+
+
+        /* Header images */
+        .header-logo-left {
+            margin-right: auto; /* Pushes the image to the left */
+            padding-left: 20px;
+        }
+
+        .header-logo-right {
+            margin-left: auto; /* Pushes the image to the right */
+            padding-right: 20px;
+        }
+
+        /* Footer styles */
+        footer {
+            margin-top: 100px;
+            background-color: #000000;
+            color: #0eff00;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        h2{
+            text-align: center;
+        }
+
+        .container {
+            padding: 20px;
+            background-color: #fff; /* Pure white background for the curved page */
+            border-radius: 15px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            display: inline-block;
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            overflow: hidden;
+        }
+
+        .container2 {
+            width: 85%;
+            margin: 20px auto; /* Center the container horizontally and add space at the top */
+            margin-bottom: 100px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            position: relative;
+            display: none;
+            overflow: hidden;
+        }
+
+        /* Text field and label styles */
+        .form-group2 {
+            margin-bottom: 25px;
+            margin-top: 25px;
+            display: flex;
+            align-items: center;
+            padding-right: 50px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            padding-right: 50px;
+        }
+
+        .label2 {
+            width: 250px; /* Adjust the width of the label as needed */
+            font-size: larger;
+            font-weight: bolder;
+            margin-right: 10px;
+            text-align: right;
+        }
+
+        label {
+            width: 250px; /* Adjust the width of the label as needed */
+            margin-right: 10px;
+            text-align: right;
+        }
+
+        .required {
+            color: red;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            color: blue;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 50px;
+        }
+
+        /* Shadow-like effect for corners */
+        .container2::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: radial-gradient(circle at top left, transparent 10px, #f0f0f0 20px); /* Light gray shadow effect */
+            border-radius: 15px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .curved-border-div {
+            width: 900px;
+            margin: auto; /* Center the div horizontally and provide top margin */
+            margin-top: 20px;
+            background-color: #f0f0f0; /* Background color */
+            border-radius: 20px; /* Adjust the border-radius to control the curvature */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Box shadow for a 3D effect */
+            padding: 20px; /* Optional: Add padding to the div content */
+            text-align: center;
+        }
+
+
+
+        .delete_item{
+            margin-top: 20px;
+            margin-bottom: 20px;
+            background-color: rgb(206,21,63,1);
+            color: rgb(255,255,255);
+            border-style: solid;
+            border-width: 2px;
+            border-color: rgb(206,21,63,1);
+            font-size: 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            padding-right: 20px;
+            padding-left: 20px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            cursor: pointer;
+        }
+
+        .delete_item:hover{
+            background-color: rgb(255,255,255);
+            color: rgb(206,21,63,1);
+        }
+
+        .delete_item:active{
+            background-color: rgb(255,255,255);
+            border-color: rgb(0, 0, 0);
+            color: rgb(0,0,0);
+        }
+
+        .button_div{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;            
+        }
+
+        @keyframes blink {
+            0% {
+                color: black;
+            }
+            50% {
+                color: red;
+            }
+            100% {
+                color: black;
+            }
+        }
+
+        /* Apply the animation to the text */
+        .blinking-text {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bolder;
+            font-style: italic;
+            animation: blink 1s linear infinite;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+       <img src="{% static 'indus_logo.png' %}" alt="Left Image" class="header-logo-left" width="200" height="100">
+
+        <!-- Title or other content in the center -->
+        <h1>HEALTH CARE INSURANCE</h1>
+
+        <!-- Right image -->
+        <img src="{% static 'jubilee_logo.png' %}" alt="Right Image" class="header-logo-right" width="200" height="100">
+    </header>
+    <div class="container" id="div1">
+        <form action="" name="Form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group2">
+                <label class="label2" for="employee_id">Enter Employee ID:</label>
+                <input type="text" id="employee_id" name="employee_id" placeholder="800">
+            </div>
+            <div class="blinking-text">
+                <label class="label2" for="employee_id">{{ result }}</label>
+            </div>
+            <div class="button_div">
+                <button onclick="toggleDivs()" type="submit" class="delete_item">Get Employee</button>
+            </div>
+        </form>
+    </div>
+    <div class="container2" id="div2">
+        <form action="" name="Form2" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h2>Inpatient Medical Claim Form</h2>
+            <div class="form-group">
+                <label for="company_name">Name Of Company / Policy Holder:<span class="required">*</span></label>
+                <input type="text" id="company_name" name="company_name" value="Indus University" readonly>
+            </div>
+            <div class="form-group">
+                <label for="claimant_name">Claimant Name:<span class="required">*</span></label>
+                <input type="text" id="claimant_name" name="claimant_name" value="{{ jubilee_data.2 }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="claimant_father_name">Claimant's Father/Spouse Name:<span class="required">*</span></label>
+                <input type="text" id="claimant_father_name" name="claimant_father_name" value="{{ jubilee_data.3 }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="claimant_address">Full Address Of Claimant:</label>
+                <input type="text" id="claimant_address" name="claimant_address">
+            </div>
+            <div class="form-group">
+                <label for="claimant_full_name">Full name Of Claimant:<span class="required">*</span></label>
+                <input type="text" id="claimant_full_name" name="claimant_full_name" value="{{ jubilee_data.2 }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="date_of_birth">Date Of Birth:<span class="required">*</span></label>
+                <input type="text" id="date_of_birth" name="date_of_birth" value="{{ jubilee_data.4 }}" readonly>
+                <label for="cnic">CNIC:<span class="required">*</span></label>
+                <input type="text" id="cnic" name="cnic" value="{{ jubilee_data.5 }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <input type="radio" style="margin-left:0px;" name="gender" value="male" checked> Male<br>
+                <input type="radio" style="margin-left:100px;" name="gender" value="female"> Female<br>
+                <label for="phone_number">Phone Number:</label>
+                <input type="text" id="phone_number" name="phone_number">
+            </div>
+            <div class="form-group">
+                <label for="policy_number">Policy Number:<span class="required">*</span></label>
+                <input type="text" id="policy_number" name="policy_number" value="{{ jubilee_data.7 }}" readonly>
+                <label for="insurance_number">Certicate Number:<span class="required">*</span></label>
+                <input type="text" id="insurance_number" name="insurance_number" value="{{ jubilee_data.1 }}" readonly>
+            </div>
+<!--            <div class="form-group">-->
+<!--                <label for="relationship">Relation Ship With Claimant:</label>-->
+<!--                <input type="radio" style="margin-left:0px;" name="relationship" value="employee" checked readonly> Employee<br>-->
+<!--                <input type="radio" style="margin-left:50px;" name="relationship" value="dependent" readonly> Dependent<br>-->
+<!--            </div>-->
+            <div class="form-group">
+                <label for="illness">Nature Of Illness:<span class="required">*</span></label>
+                <input type="text" id="illness" name="illness" placeholder="Stomach Pain / Foot Infection etc.">
+            </div>
+            <div class="form-group">
+                <label for="symptoms_occur">When Symptoms First Occur:<span class="required">*</span></label>
+                <input type="text" id="symptoms_occur" name="symptoms_occur" placeholder="What is the oldest date in your medical documents (01-09-2023)">
+            </div>
+            <div class="form-group">
+                <label for="last_working_day">Last Working Day:<span class="required">*</span></label>
+                <input type="text" id="last_working_day" name="last_working_day" placeholder="01-09-2023">
+            </div>
+            <div class="form-group">
+                <label for="hospital_name">Hospital Name:<span class="required">*</span></label>
+                <input type="text" id="hospital_name" name="hospital_name" placeholder="Agha Khan Hospital">
+            </div>
+            <div class="form-group">
+                <label for="hospital_address">Hospital Address:</label>
+                <input type="text" id="hospital_address" name="hospital_address">
+            </div>
+            <div class="form-group">
+                <label for="doctor_name">Name Of Doctor:<span class="required">*</span></label>
+                <input type="text" id="doctor_name" name="doctor_name">
+            </div>
+            <div class="form-group">
+                <label for="patient_current_address">Where we can examine Patient:</label>
+                <input type="text" id="patient_current_address" name="patient_current_address" placeholder="If Insurance company haven't intimated then Leave this blank">
+            </div>
+            <div class="form-group">
+                <label for="another_insurance">Do you have any other Insurance:</label>
+                <input type="text" id="another_insurance" name="another_insurance" placeholder="If not then Leave this blank">
+            </div>
+            <div class="form-group">
+                <label for="previous_treatment">Is this continuation Of Old Treatment:</label>
+                <input type="text" id="previous_treatment" name="previous_treatment" placeholder="If not then Leave this blank">
+            </div>
+            <h2>Filled In By The Treating Doctor</h2>
+            <div class="form-group">
+                <label for="patient_name">Name Of Patient:</label>
+                <input type="text" id="patient_name" name="patient_name" value="{{ jubilee_data.2 }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="how_long_patient_treatment">How long have you been treating:</label>
+                <input type="text" id="how_long_patient_treatment" name="how_long_patient_treatment" value="Currently" readonly>
+            </div>
+            <div class="form-group">
+                <label for="how_long_patient_disease">How old is the disease:</label>
+                <input type="text" id="how_long_patient_disease" name="how_long_patient_disease">
+            </div>
+            <div class="form-group">
+                <label for="doctor_diagnosis">Whats you diagnosis:</label>
+                <input type="text" id="doctor_diagnosis" name="doctor_diagnosis">
+            </div>
+            <div class="form-group">
+                <label for="surgical">Brief Detail Of Surgical (if any):</label>
+                <input type="text" id="surgical" name="surgical">
+            </div>
+            <div class="form-group">
+                <label for="which_disease">Type of disease:</label>
+                <input type="radio" style="margin-left:5px;" name="which_disease" value="congenital" readonly> CONGENITAL<br>
+                <input type="radio" style="margin-left:5px;" name="which_disease" value="infertility" readonly> INFERTITLITY<br>
+                <input type="radio" style="margin-left:5px;" name="which_disease" value="psychiatric" readonly> PSYCHIATRIC<br>
+                <input type="radio" style="margin-left:5px;" name="which_disease" value="cosmetic" readonly> COSMETIC<br>
+                <input type="radio" style="margin-left:5px;" name="which_disease" value="sucide" readonly> SUCIDE<br>
+                <input type="radio" style="margin-left:5px;" name="which_disease" value="contraceptive" readonly> CONTRACEPTIVE<br>
+                <input type="radio" style="margin-left:5px;" name="which_disease" value="others" checked readonly> OTHERS<br>
+            </div>
+            <div class="form-group">
+                <label for="treatment_detail">Brief Detail Of treatment:</label>
+                <input type="text" id="treatment_detail" name="treatment_detail">
+            </div>
+            <div class="form-group">
+                <label for="suffered_before">Suffered with this kinda disease before:</label>
+                <input type="text" id="suffered_before" name="suffered_before" placeholder="If yes provide Details, leave blank if not">
+            </div>
+            <h2>Incase Of Maternity Claims</h2>
+            <div class="form-group">
+                <label for="delivery_date">Expected Date Of Delivery:</label>
+                <input type="text" id="delivery_date" name="delivery_date" placeholder="01-09-2023">
+            </div>
+            <div class="form-group">
+                <label for="c_section">if C-Section, Specify Necessity:</label>
+                <input type="text" id="c_section" name="c_section" placeholder="Placenta separates from the uterine lining">
+            </div>
+            <div class="form-group">
+                <label for="first_maternity_visit">First visit To Doctor for maternity:</label>
+                <input type="text" id="first_maternity_visit" name="first_maternity_visit" placeholder="01-09-2023">
+            </div>
+            <div class="form-group">
+                <label for="claim_amount">Claim Amount:<span class="required">*</span></label>
+                <input type="number" id="claim_amount" name="claim_amount">
+            </div>
+            <div class="form-group">
+                <div class="curved-border-div">
+                    <!-- Content goes here -->
+                    <li>Add the amount of payment receipts</li>
+                    <li>Attach All payment Receipts Original and Photocopy of all other documents with the form</li>
+                    <br>
+                    <li style="color: red; font-style: italic;">Make sure there is no duplicate payment receipts while adding amount</li>
+                    <li style="color: red; font-style: italic;">No Lab test claim will be granted unless doctor prescription of test is also attached</li>
+                    <li style="color: red; font-style: italic;">Medicines claims are purely subjective on scruitnization</li>
+                    <h3 style="color: red;">!!! Calculation is done on Jubilee's end and it entirely depend on them what amount they approve !!!</h3>
+                </div>
+            </div>
+            <div class="button_div">
+                <button type="submit" onclick="return validateForm()" class="delete_item">PRINT FORM</button>
+            </div>
+        </form>
+    </div>
+    <footer>
+        <p>@ Usman Mustafa Khawar</p>
+    </footer>
+</body>
+</html>
