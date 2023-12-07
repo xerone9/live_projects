@@ -1,0 +1,332 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jubilee Health Insurance</title>
+    <style>
+        /* Reset default margin and padding */
+        body, html {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(90deg, rgba(250,249,246,1) 0%, rgba(250,249,246,1) 15%, rgba(206,21,63,1) 41%); /* Light gray background for the entire page */
+        }
+
+        /* Header styles */
+        /* Header styles */
+        header {
+            background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 15%, rgba(206,21,63,1) 41%);
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between; /* Space between the images */
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .radio {
+            padding-right: 1000px;
+            padding-left: 1000px;
+        }
+
+        /* Header images */
+        .header-logo-left {
+            margin-right: auto; /* Pushes the image to the left */
+            padding-left: 20px;
+        }
+
+        .header-logo-right {
+            margin-left: auto; /* Pushes the image to the right */
+            padding-right: 20px;
+        }
+
+        /* Footer styles */
+        footer {
+            background-color: #000000;
+            color: #0eff00;
+            padding: 10px;
+            text-align: center;
+        }
+
+        /* Container styles */
+        .container2 {
+            width: 90%; /* Adjust the width as needed */
+            margin: 20px auto; /* Create space between header and container */
+            padding: 20px;
+            background-color: #fff; /* Pure white background for the curved page */
+            border-radius: 15px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Text field and label styles */
+        .form-group {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            padding-right: 50px;
+        }
+
+        label {
+            width: 250px; /* Adjust the width of the label as needed */
+            margin-right: 10px;
+            text-align: right;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            color: rgb(0,117,255);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 50px;
+        }
+
+        /* Shadow-like effect for corners */
+        .container::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: radial-gradient(circle at top left, transparent 10px, #f0f0f0 20px); /* Light gray shadow effect */
+            border-radius: 15px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .curved-border-div {
+            width: 900px;
+            margin: auto; /* Center the div horizontally and provide top margin */
+            margin-top: 20px;
+            background-color: #f0f0f0; /* Background color */
+            border-radius: 20px; /* Adjust the border-radius to control the curvature */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Box shadow for a 3D effect */
+            padding: 20px; /* Optional: Add padding to the div content */
+            text-align: center;
+        }
+
+        .delete_item{
+            background-color: rgb(206,21,63,1);
+            color: rgb(255,255,255);
+            border-style: solid;
+            border-width: 2px;
+            border-color: rgb(206,21,63,1);
+            font-size: 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            padding-right: 20px;
+            padding-left: 20px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            cursor: pointer;
+        }
+
+        .delete_item:hover{
+            background-color: rgb(255,255,255);
+            color: rgb(206,21,63,1);
+        }
+
+        .delete_item:active{
+            background-color: rgb(255,255,255);
+            border-color: rgb(0, 0, 0);
+            color: rgb(0,0,0);
+        }
+
+        .button_div{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;            
+        }
+
+    </style>
+</head>
+
+<!--
+Employee ID:  jubilee_data.0
+Insured ID: jubilee_data.1
+Employee Name: jubilee_data.2
+Father Name: jubilee_data.3
+Date Of Birth: jubilee_data.4
+NIC: jubilee_data.5
+Insurance Number: jubilee_data.7
+-->
+<body>
+    <header>
+        <img src="{% static 'indus_logo.png' %}" alt="Left Image" class="header-logo-left" width="200" height="100">
+
+        <!-- Title or other content in the center -->
+        <h1>HEALTH CARE INSURANCE</h1>
+
+        <!-- Right image -->
+        <img src="{% static 'jubilee_logo.png' %}" alt="Right Image" class="header-logo-right" width="200" height="100">
+    </header>
+    <div class="container">
+        <form action="" name="Form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h2>Inpatient Medical Claim Form</h2>
+            <div class="form-group">
+                <label for="company_name">Name Of Company / Policy Holder:</label>
+                <input type="text" id="company_name" name="company_name" value="Indus University" disabled>
+            </div>
+<!--            <div class="form-group">-->
+<!--                <label for="claimant_name">Claimant Name:</label>-->
+<!--                <input type="text" id="claimant_name" value="{{ jubilee_data.2 }}" disabled>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="claimant_father_name">Claimant's Father/Spouse Name:</label>-->
+<!--                <input type="text" id="claimant_father_name" value="{{ jubilee_data.3 }}" disabled>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="claimant_address">Full Address Of Claimant:</label>-->
+<!--                <input type="text" id="claimant_address">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="claimant_full_name">Full name Of Claimant:</label>-->
+<!--                <input type="text" id="claimant_full_name" value="{{ jubilee_data.2 }}" disabled>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="date_of_birth">Date Of Birth:</label>-->
+<!--                <input type="text" id="date_of_birth" value="{{ jubilee_data.4 }}" disabled>-->
+<!--                <label for="cnic">CNIC:</label>-->
+<!--                <input type="text" id="cnic" value="{{ jubilee_data.5 }}" disabled>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="gender">Gender:</label>-->
+<!--                <input type="radio" style="margin-left:0px;" name="gender" value="male" checked> Male<br>-->
+<!--                <input type="radio" style="margin-left:100px;" name="gender" value="female"> Female<br>-->
+<!--                <label for="phone_number">Phone Number:</label>-->
+<!--                <input type="text" id="phone_number">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="policy_number">Policy Number:</label>-->
+<!--                <input type="text" id="policy_number" value="{{ jubilee_data.7 }}" disabled>-->
+<!--                <label for="insurance_number">Certicate Number:</label>-->
+<!--                <input type="text" id="insurance_number" value="{{ jubilee_data.1 }}" disabled>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="relationship">Relation Ship With Claimant:</label>-->
+<!--                <input type="radio" style="margin-left:0px;" name="relationship" value="employee" checked disabled> Employee<br>-->
+<!--                <input type="radio" style="margin-left:50px;" name="relationship" value="dependent" disabled> Dependent<br>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="illness">Nature Of Illness:</label>-->
+<!--                <input type="text" id="illness" placeholder="Stomach Pain / Foot Infection etc.">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="symptoms_occur">When Symptoms First Occur:</label>-->
+<!--                <input type="text" id="symptoms_occur" placeholder="What is the oldest date in your medical documents (01-09-2023)">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="last_working_day">Last Working Day:</label>-->
+<!--                <input type="text" id="last_working_day" placeholder="01-09-2023">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="hospital_name">Hospital Name:</label>-->
+<!--                <input type="text" id="hospital_name" placeholder="Agha Khan Hospital">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="hospital_address">Hospital Address:</label>-->
+<!--                <input type="text" id="hospital_address">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="doctor_name">Name Of Doctor:</label>-->
+<!--                <input type="text" id="doctor_name">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="patient_current_address">Where we can examine Patient:</label>-->
+<!--                <input type="text" id="patient_current_address" placeholder="If Insurance company haven't intimated then Leave this blank">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="another_insurance">Do you have any other Insurance:</label>-->
+<!--                <input type="text" id="another_insurance" placeholder="If not then Leave this blank">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="previous_treatment">Is this continuation Of Old Treatment:</label>-->
+<!--                <input type="text" id="previous_treatment" placeholder="If not then Leave this blank">-->
+<!--            </div>-->
+<!--            <h2>Filled In By The Treating Doctor</h2>-->
+<!--            <div class="form-group">-->
+<!--                <label for="patient_name">Name Of Patient:</label>-->
+<!--                <input type="text" id="patient_name" value="{{ jubilee_data.2 }}" disabled>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="how_long_patient_treatment">How long have you been treating:</label>-->
+<!--                <input type="text" id="how_long_patient_treatment" value="Currently" disabled>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="how_long_patient_disease">How old is the disease:</label>-->
+<!--                <input type="text" id="how_long_patient_disease">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="doctor_diagnosis">Whats you diagnosis:</label>-->
+<!--                <input type="text" id="doctor_diagnosis">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="surgical">Brief Detail Of Surgical (if any):</label>-->
+<!--                <input type="text" id="surgical">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="which_disease">Type of disease:</label>-->
+<!--                <input type="radio" style="margin-left:5px;" name="which_disease" value="congenital" disabled> CONGENITAL<br>-->
+<!--                <input type="radio" style="margin-left:5px;" name="which_disease" value="infertility" disabled> INFERTITLITY<br>-->
+<!--                <input type="radio" style="margin-left:5px;" name="which_disease" value="psychiatric" disabled> PSYCHIATRIC<br>-->
+<!--                <input type="radio" style="margin-left:5px;" name="which_disease" value="cosmetic" disabled> COSMETIC<br>-->
+<!--                <input type="radio" style="margin-left:5px;" name="which_disease" value="sucide" disabled> SUCIDE<br>-->
+<!--                <input type="radio" style="margin-left:5px;" name="which_disease" value="contraceptive" disabled> CONTRACEPTIVE<br>-->
+<!--                <input type="radio" style="margin-left:5px;" name="which_disease" value="others" checked disabled> OTHERS<br>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="treatment_detail">Brief Detail Of treatment:</label>-->
+<!--                <input type="text" id="treatment_detail">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="suffered_before">Suffered with this kinda disease before:</label>-->
+<!--                <input type="text" id="suffered_before" placeholder="If yes provide Details, leave blank if not">-->
+<!--            </div>-->
+<!--            <h2>Incase Of Maternity Claims</h2>-->
+<!--            <div class="form-group">-->
+<!--                <label for="delivery_date">Expected Date Of Delivery:</label>-->
+<!--                <input type="text" id="delivery_date" placeholder="01-09-2023">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="c_section">if C-Section, Specify Necessity:</label>-->
+<!--                <input type="text" id="c_section" placeholder="Placenta separates from the uterine lining">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="first_maternity_visit">First visit To Doctor for maternity:</label>-->
+<!--                <input type="text" id="first_maternity_visit" placeholder="01-09-2023">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label for="claim_amount">Claim Amount:</label>-->
+<!--                <input type="text" id="claim_amount">-->
+<!--            </div>-->
+            <div class="form-group">
+                <div class="curved-border-div">
+                    <!-- Content goes here -->
+                    <li>Add the amount of payment receipts</li>
+                    <li>Attach All payment Receipts Original and Photocopy of all other documents with the form</li>
+                    <br>
+                    <li style="color: red; font-style: italic;">Make sure there is no duplicate payment receipts while adding amount</li>
+                    <li style="color: red; font-style: italic;">No Lab test claim will be granted unless doctor prescription of test is also attached</li>
+                    <li style="color: red; font-style: italic;">Medicines claims are purely subjective on scruitnization</li>
+                    <h3 style="color: red;">!!! Calculation is done on Jubilee's end and it entirely depend on them what amount they approve !!!</h3>
+                </div>
+            </div>
+            <div class="button_div">
+                <button type="submit" class="delete_item">PRINT FORM</button>
+            </div>
+        </form>
+    </div>
+    <footer>
+        <p>@ Usman Mustafa Khawar</p>
+    </footer>
+</body>
+</html>

@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'members',
     'amount_translator',
     'jubilee_insurance',
+    'employee_insurance_details_page',
+    'django.contrib.humanize'
 ]
 
 MIDDLEWARE = [

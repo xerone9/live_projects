@@ -8,4 +8,5 @@ urlpatterns = [
     path('class-scheduler/members/', include('members.urls')),
     path('amount_translator/', include('amount_translator.urls')),
     path('jubilee_insurance/', include('jubilee_insurance.urls')),
+    path('employee_insurance_details/', include('employee_insurance_details_page.urls')),
 ]

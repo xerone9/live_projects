@@ -1,0 +1,856 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<script>
+    function toggleDivs() {
+            var div1 = document.getElementById('div1');
+            var div2 = document.getElementById('div2');
+            var claimantNameField = document.getElementById('claimant_name');
+
+            // Check if the claimant name field has a value
+            if (claimantNameField.value) {
+                div1.style.display = 'none';
+                div2.style.display = 'block';
+            } else {
+                div1.style.display = 'block';
+                div2.style.display = 'none';
+            }
+
+            // Store the value of the claimant name field
+            localStorage.setItem('claimantName', claimantNameField.value);
+
+            // Check if div2 has a value and hide div1 accordingly
+            if (div2.innerText.trim() !== "") {
+                div1.style.display = 'none';
+            }
+        }
+
+        // Initialize the divs based on stored data
+        document.addEventListener('DOMContentLoaded', function () {
+            var div1 = document.getElementById('div1');
+            var div2 = document.getElementById('div2');
+            var claimantNameField = document.getElementById('claimant_name');
+
+            // Check if the claimant name field has a value
+            if (claimantNameField.value) {
+                div1.style.display = 'none';
+                div2.style.display = 'flex';
+            } else {
+                div1.style.display = 'block';
+                div2.style.display = 'none';
+            }
+        });
+</script>
+<script>
+    function validateForm() {
+        var requiredFields = [
+            "company_name",
+            "claimant_name",
+            "claimant_father_name",
+            "claimant_full_name",
+            "date_of_birth",
+            "cnic",
+            "policy_number",
+            "insurance_number",
+            "illness",
+            "symptoms_occur",
+            "last_working_day",
+            "hospital_name",
+            "doctor_name",
+            "claim_amount"
+        ];
+
+        for (var i = 0; i < requiredFields.length; i++) {
+            var fieldName = requiredFields[i];
+            var fieldValue = document.getElementById(fieldName).value.trim();
+            if (fieldValue === "") {
+                alert("Field '" + fieldName + "' is empty. Please fill in all required fields.");
+                return false; // Prevent form submission
+            }
+        }
+        return true; // Allow form submission if all fields are filled
+    }
+</script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jubilee Health Insurance</title>
+    <style>
+        /* Reset default margin and padding */
+        body, html {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(90deg, rgba(5,127,142,1) 0%, rgba(255,255,255,1) 50%, rgba(206,21,63,1) 100%);
+        }
+
+        /* Header styles */
+        /* Header styles */
+        header {
+            background: linear-gradient(90deg, rgba(5,127,142,1) 0%, rgba(255,255,255,1) 50%, rgba(206,21,63,1) 100%);
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between; /* Space between the images */
+        }
+
+        .set_jubilee_name_info {
+            color: black;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between; /* Space between the images */
+        }
+
+
+        /* Header images */
+        .header-logo-left {
+            margin-right: auto; /* Pushes the image to the left */
+            padding-left: 20px;
+        }
+
+        .header-logo-right {
+            margin-left: auto; /* Pushes the image to the right */
+            padding-right: 20px;
+        }
+
+        .insruance_rank {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .insurance_count,
+        .plan_logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .insurance_count img,
+        .plan_logo img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .insurance_count {
+            margin-right: auto; /* Push the left container to the left */
+            font-family: 'Helvetica';
+            font-size: 50px;
+        }
+
+        .plan_logo {
+            margin-left: auto; /* Push the right container to the right */
+        }
+
+        .employee_details {
+            font-size: 20px;
+        }
+
+        /* Footer styles */
+        footer {
+            margin-top: 100px;
+            background-color: #000000;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            bottom: 0;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+        }
+
+        h2{
+            text-align: center;
+        }
+
+        .container {
+            padding: 20px;
+            background-color: #fff; /* Pure white background for the curved page */
+            border-radius: 15px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            display: inline-block;
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            overflow: hidden;
+            top: 20%; /* adjust the top position */
+            margin-bottom: 120px;
+        }
+
+        .container2 {
+            width: 85%;
+            margin: 20px auto; /* Center the container horizontally and add space at the top */
+            margin-bottom: 200px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+
+        .todo:not(.container2) {
+            margin-left: -20px;
+        }
+
+
+        .row_distribution{
+            display: flex;
+            flex-direction: row;
+        }
+
+        .column_distribution{
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Text field and label styles */
+        .form-group2 {
+            margin-bottom: 25px;
+            margin-top: 25px;
+            display: flex;
+            align-items: center;
+            padding-right: 50px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            padding-right: 50px;
+        }
+
+        .label2 {
+            width: 250px; /* Adjust the width of the label as needed */
+            font-size: larger;
+            font-weight: bolder;
+            margin-right: 10px;
+            text-align: right;
+        }
+
+        label {
+            width: 250px; /* Adjust the width of the label as needed */
+            margin-right: 10px;
+            text-align: right;
+        }
+
+        .required {
+            color: red;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            color: blue;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 50px;
+        }
+
+        input[type="password"] {
+            flex: 1;
+            padding: 10px;
+            color: blue;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 50px;
+        }
+
+        /* Shadow-like effect for corners */
+        .container2::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: radial-gradient(circle at top left, transparent 10px, #f0f0f0 20px); /* Light gray shadow effect */
+            border-radius: 15px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .curved-border-div {
+            width: 900px;
+            margin: auto; /* Center the div horizontally and provide top margin */
+            margin-top: 20px;
+            background-color: #f0f0f0; /* Background color */
+            border-radius: 20px; /* Adjust the border-radius to control the curvature */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Box shadow for a 3D effect */
+            padding: 20px; /* Optional: Add padding to the div content */
+            text-align: center;
+        }
+
+
+
+        .delete_item{
+            margin-top: 20px;
+            margin-bottom: 20px;
+            background-color: rgb(206,21,63,1);
+            color: rgb(255,255,255);
+            border-style: solid;
+            border-width: 2px;
+            border-color: rgb(206,21,63,1);
+            font-size: 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            padding-right: 20px;
+            padding-left: 20px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            cursor: pointer;
+        }
+
+        .delete_item:hover{
+            background-color: rgb(255,255,255);
+            color: rgb(206,21,63,1);
+        }
+
+        .delete_item:active{
+            background-color: rgb(255,255,255);
+            border-color: rgb(0, 0, 0);
+            color: rgb(0,0,0);
+        }
+
+        .button_div{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        @keyframes blink {
+            0% {
+                color: black;
+            }
+            50% {
+                color: red;
+            }
+            100% {
+                color: black;
+            }
+        }
+
+        /* Apply the animation to the text */
+        .blinking-text {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bolder;
+            font-style: italic;
+            animation: blink 1s linear infinite;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        button {
+            width: 250px;
+            height: 50px;
+            background-color: rgb(211,46,84);
+            border-color: rgb(211,46,84);
+            color: white;
+            font-weight: 400;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: white;
+            border-color: rgb(211,46,84);
+            color: rgb(211,46,84);
+        }
+        button:active {
+            background-color: white;
+            border-color: black;
+            color: black;
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <header>
+       <img src="{% static 'efu_logo2.png' %}" alt="Left Image" class="header-logo-left" width="100px" height="100px">
+
+        <!-- Title or other content in the center -->
+        <img src="{% static 'indus_logo.png' %}" alt="Left Image" width="200" height="100">
+
+        <!-- Right image -->
+        <img src="{% static 'jubilee_logo.png' %}" alt="Right Image" class="header-logo-right" width="200" height="100">
+    </header>
+    <div class="container" id="div1">
+        <form action="" name="Form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group2">
+                <label class="label2" for="employee_id">Enter Employee ID:</label>
+                <input type="text" id="employee_id" name="employee_id" placeholder="800">
+            </div>
+            <div class="form-group2">
+                <label class="label2" for="employee_nic">Enter Employee NIC:</label>
+                <input type="password" id="employee_nic" name="employee_nic" placeholder="11111-1111111-1">
+            </div>
+            <div class="blinking-text">
+                <label class="label2" for="employee_id">{{ result }}</label>
+            </div>
+            <div class="button_div">
+                <button onclick="toggleDivs()" type="submit" class="delete_item">Get Employee</button>
+            </div>
+        </form>
+    </div>
+    <div class="container2" id="div2">
+        <div class="insruance_rank">
+            <div class="insurance_count">
+                No. Of Insurances:
+                <span style="color: blue; margin-left: 20px;">{{ result.count }}</span>
+            </div>
+            <div class="plan_logo">
+                <img src="{% static 'plan.png' %}" alt="Plan" width="200px" height="100px">
+                {% if result.plan == 'A' %}
+                    <img src="{% static 'A.png' %}" alt="rank" width="100px" height="100px">
+                {% elif result.plan == 'B' %}
+                    <img src="{% static 'B.png' %}" alt="rank" width="100px" height="100px">
+                {% elif result.plan == 'C' %}
+                    <img src="{% static 'C.png' %}" alt="rank" width="100px" height="100px">
+                {% elif result.plan == 'D' %}
+                    <img src="{% static 'D.png' %}" alt="rank" width="100px" height="100px">
+                {% endif %}
+            </div>
+        </div>
+        <br>
+        <div class="todo" style="width: 80%; justify-content: center; align-self: center; padding-bottom: 40px; padding-top: 40px; background: radial-gradient(circle, rgba(176,176,176,1) 34%, rgba(255,255,255,1) 100%);">
+            <div class="row_distribution"style="justify-content: center; align-self: center;">
+                <div class="row_distribution">
+                    <div style="margin-left: 40px;">
+                        <div class="employee_details">
+                            <span style="font-family: 'Times New Roman', Times, serif;">Name:</span>
+                            <span style="font-family: cursive; color: white;">{{ result.name }}</span><br>
+                            <span style="font-family: 'Times New Roman', Times, serif;">Father Name:</span>
+                            <span style="font-family: cursive; color: white;">{{ result.father_name }}</span><br>
+                            <span style="font-family: 'Times New Roman', Times, serif;">Employee NIC:</span>
+                            <span style="font-family: cursive; color: white;">{{ result.nic }}</span><br>
+                            <span style="font-family: 'Times New Roman', Times, serif;">Marital Status:</span>
+                            <span style="font-family: cursive; color: white;">{{ result.martial_status }}</span><br>
+                            <span style="font-family: 'Times New Roman', Times, serif;">Date Of Birth:</span>
+                            <span style="font-family: cursive; color: white;">{{ result.date_of_birth }}</span><br>
+                        </div>
+                    </div>
+                    <div style="margin-left: 150px;">
+                        <div class="employee_details">
+                            <span style="font-family: 'Times New Roman', Times, serif;">Employee Id:</span>
+                            <span style="font-family: cursive; color: white;">{{ emp_id }}</span><br>
+                            <span style="font-family: 'Times New Roman', Times, serif;">Designation:</span>
+                            <span style="font-family: cursive; color: white;">{{ result.designation }}</span><br>
+                            <span style="font-family: 'Times New Roman', Times, serif;">Department:</span>
+                            <span style="font-family: cursive; color: white;">{{ result.department }}</span><br>
+                            <span style="font-family: 'Times New Roman', Times, serif;">Total Insurnace Premium:</span>
+                            <span style="font-family: cursive; color: red;">{{ result.total_charges|default:0|intcomma }}/-</span><br>
+                            <span style="font-family: 'Times New Roman', Times, serif;">Indus Paid Premium:</span>
+                            <span style="font-family: cursive; color: white;">{{ result.premium.indus_pay|default:0|floatformat:0|intcomma }}/-</span><br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="background: linear-gradient(90deg, rgba(255,255,255,1) 25%, rgba(211,46,84,1) 75%); color: white; width: 100%; padding: 10px; align-items: right; justify-content: right; align-items: right; display: flex; flex-direction: row;">
+            <img src="{% static 'jubilee_logo.png' %}" alt="Right Image" width="200" height="100" style="padding-right: 20px;">
+        </div>
+        <br>
+        <div class="set_jubilee_name_info">
+            <div class="header-logo-right"  style="font-size: 15px;">
+                Expiry Date: 30-Jun-2024
+            </div>
+        </div>
+        <div class="set_jubilee_name_info">
+            <div class="header-logo-left" style="font-size: 25px; background-color: white; width: 300px; padding: 20px; border-radius: 12px; color: rgba(211,46,84,1); border: 2px solid rgba(211,46,84,1);">
+                Insured ID: {{ result.jubilee_insured_id }}
+            </div>
+            <div style="font-size: 25px; background-color: rgba(211,46,84,1); width: 300px; padding: 20px; border-radius: 12px; color: white;">
+                Insured Amount: {{ result.jubilee_104755.insured_amount|default:0|intcomma }}/-
+            </div>
+            <div class="header-logo-right"  style="font-size: 25px; background-color: white; width: 300px; padding: 20px; border-radius: 12px; color: rgba(211,46,84,1); border: 2px solid rgba(211,46,84,1);">
+                Premium Paid: {{ result.jubilee_total_charges|default:0|intcomma }}/-
+            </div>
+        </div>
+        <div>
+            <div class="row_distribution">
+                <div class="column_distribution" style="border-radius: 20px;">
+                    <div class="row_distribution">
+                        <h3 style="text-decoration: underline;">General Insurance</h3><br>
+                    </div>
+                    <div class="row_distribution">
+                        <div class="employee_details" style="color: grey;">
+                            <li>You are insured for a above mentioned amount, ensuring financial support in case of hospitalization. Your insurance coverage allows you to seek treatment at any registered hospital mentioned in the provided list. Remember, the insurance card is not applicable for outpatient treatments (OPD). Utilize the card when facing illnesses that require admission to the hospital.</li>
+                            <li>To streamline the claim process, it is highly recommended to choose hospitals listed in the provided network. Present your insurance card at these hospitals, and the billing process will be smoother. In case you opt for a non-listed hospital, you must collect and submit all original documents, including doctors' prescriptions, bills, and reports, for claim processing. However, we strongly encourage you to use hospitals mentioned in the list to avoid any inconvenience.</li>
+                            <li>Your insurance coverage extends to various medical tests and procedures, such as dialysis, cataract surgery, CT scans, and more. Please refer to the comprehensive list below for a detailed overview of the tests covered. This provision aims to ensure your health and well-being by covering a range of essential medical services.</li>
+                        </div>
+                    </div>
+                </div>
+                {% if result.gender == 'Female' %}
+                    {% if result.martial_status == 'Married' %}
+                        {% if result.maternity_charges > 700 %}
+                         <div class="column_distribution" style="border-radius: 20px; margin-left: 20px;">
+                            <div class="row_distribution">
+                                <h3 style="text-decoration: underline;">Maternity</h3><br>
+                            </div>
+                             <div class="row_distribution" style="align-self: center; margin-top: -20px;">
+                                <div class="column_distribution" style="padding-left: 0px; padding-right: 0px">
+                                    <h3 style="font-style: italic;">Normal Delivery: {{ result.jubilee_104755.maternity.normal|default:0|intcomma }}/-</h3><br>
+                                </div>
+                                <div class="column_distribution" style="padding-left: 100px;">
+                                    <h3 style="font-style: italic;">Operate Delivery: {{ result.jubilee_104755.maternity.operate|default:0|intcomma }}/-</h3><br>
+                                </div>
+                            </div>
+                            <div class="row_distribution">
+                                <div class="employee_details" style="color: grey;">
+                                    <li>Your maternity insurance comes with a separate coverage limit of {{ result.jubilee_104755.maternity.normal|default:0|intcomma }}/- for normal delivery and {{ result.jubilee_104755.maternity.operate|default:0|intcomma }}/- for operative delivery. It's important to note that if the expenses for normal delivery exceed {{ result.jubilee_104755.maternity.normal|default:0|intcomma }}/-, the excess amount will not be adjusted against the operative delivery coverage. This ensures clarity in your maternity coverage and helps you plan for potential costs associated with different delivery scenarios.</li>
+                                    <li>All admissions related to maternity cases will be settled from your maternity coverage amount. This means that even if you are not admitted for maternity reasons yet, charges related to maternity will be deducted from your maternity coverage. It's crucial to be aware of this arrangement to effectively manage your maternity insurance. Once the maternity amount is depleted, any additional expenses must be covered personally, as the general insured amount will not be used for delivery purposes.</li>
+                                </div>
+                            </div>
+                         </div>
+                         {% endif %}
+                     {% endif %}
+                 {% endif %}
+            </div>
+
+            {% if result.gender == 'Female' %}
+                {% if result.martial_status == 'Married' %}
+                    {% if result.maternity_charges < 700 %}
+                        <div class="header-logo-left" style="font-size: 20px; margin: 20px; color: red; font-style: italic;">
+                            Kindly be informed that our records indicate you are married, and the mentioned insured amount does not extend to maternity cases. For the inclusion of maternity benefits, please reach out to the Accounts Department; please note that additional charges will apply for this modification and you must do the insurance of your spouse as well to have the maternity benefit .
+                        </div>
+                        <div class="header-logo-left" style="font-size: 18px; margin: 20px; color: grey; margin-top: -18px;">
+                            <li>Spouse insurance addition charges are {{ result.jubilee_104755.amount|default:0|intcomma }}/- with this spouse has its separate complete covered limit of Rs. {{ result.jubilee_104755.insured_amount|default:0|intcomma }}/- and all the benefits the employee has related to insurance</li>
+                            <li>Separate maternity charges {{ result.female_employee_maternity_charges|default:0|intcomma }}/- has to be paid to get the maternity benefits.</li>
+                            <li>The total of above mentioned amounts {{ result.female_employee_maternity_charges_with_spouse_charges|default:0|intcomma }}/- will be added to your current insurance premium</li>
+                            <li>Maternity Benefits Would Add a separate {{ result.jubilee_104755.maternity.normal|default:0|intcomma }}/- Normal Delivery and {{ result.jubilee_104755.maternity.operate|default:0|intcomma }}/- Operate Delivery Benfits In Your Insurance.</li>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+
+        </div>
+
+        {% if 'dependents' in result %}
+        <h3 style="font-family: Lucida Handwriting; font-size: 30px;">Dependents</h3>
+        <div>
+            <div class="row_distribution">
+                <div class="column_distribution" style="border-radius: 20px; width: 50%;">
+                    <div class="row_distribution">
+                        <h3 style="text-decoration: underline;">General Insurance</h3><br>
+                    </div>
+                    <div class="row_distribution">
+                        <div class="employee_details" style="color: grey;">
+                            All dependents have there separate equal above mentioned insured amount and can benefit from all the benefits the employee can.<br><br>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th style="color: black;">Name</th>
+                                    <th style="color: black;">Relation</th>
+                                    <th style="color: black;">Premium Paid</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for inner_key, inner_value in result.dependents.items %}
+                                    <tr>
+                                        <td>{{ inner_key }}</td>
+                                        <td>{{ inner_value }}</td>
+                                        {% if result.gender == 'Male' and inner_value == 'Spouse' and result.maternity_charges > 700 %}
+                                            <td>{{ result.spouse_maternity_charges|default:0|intcomma }}/-</td>
+                                        {% else %}
+                                            <td>{{ result.jubilee_104755.amount|default:0|intcomma }}/-</td>
+                                        {% endif %}
+                                    <tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="column_distribution" style="border-radius: 20px; margin-left: 20px; width: 50%;">
+                    {% if result.gender == 'Male' %}
+                        <div class="row_distribution">
+                            <h3 style="text-decoration: underline;">Maternity</h3><br>
+                        </div>
+                        <div class="row_distribution" style="align-self: center; margin-top: -20px;">
+                            <div class="column_distribution" style="padding-left: 0px; padding-right: 0px">
+                                <h3 style="font-style: italic;">Normal Delivery: {{ result.jubilee_104755.maternity.normal|default:0|intcomma }}/-</h3><br>
+                            </div>
+                            <div class="column_distribution" style="padding-left: 100px;">
+                                <h3 style="font-style: italic;">Operate Delivery: {{ result.jubilee_104755.maternity.operate|default:0|intcomma }}/-</h3><br>
+                            </div>
+                        </div>
+                        <div class="row_distribution">
+                            <div class="employee_details" style="color: grey;">
+                                <li>Your maternity insurance comes with a separate coverage limit of {{ result.jubilee_104755.maternity.normal|default:0|intcomma }}/- for normal delivery and {{ result.jubilee_104755.maternity.operate|default:0|intcomma }}/- for operative delivery. It's important to note that if the expenses for normal delivery exceed {{ result.jubilee_104755.maternity.normal|default:0|intcomma }}/-, the excess amount will not be adjusted against the operative delivery coverage. This ensures clarity in your maternity coverage and helps you plan for potential costs associated with different delivery scenarios.</li>
+                                <li>All admissions related to maternity cases will be settled from your maternity coverage amount. This means that even if you are not admitted for maternity reasons yet, charges related to maternity will be deducted from your maternity coverage. It's crucial to be aware of this arrangement to effectively manage your maternity insurance. Once the maternity amount is depleted, any additional expenses must be covered personally, as the general insured amount will not be used for delivery purposes.</li>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <br>
+        {% else %}
+            {% if result.martial_status == 'Married' %}
+                <h3 style="font-family: Lucida Handwriting; font-size: 30px;">Dependents</h3>
+                <div>
+                    <div class="row_distribution" style="margin-top:-20px">
+                        <div class="column_distribution" style="border-radius: 20px; width: 50%;">
+                            <div class="row_distribution">
+                                <div class="employee_details" style="color: grey;">
+                                    You have no dependents Insured. Incase you want to insure any dependent. Read below... <br><br>
+                                    <li>Dependents registration is only limited spouse and childrens only.</li>
+                                    <li>For kids Insurance it is mandatory to insure spouse as well.</li>
+                                    {% if result.gender == 'Male' %}
+                                        <li>For spouse insurance it is mandatory to get maternity insurance which is separated from health insurance.</li>
+                                     {% endif %}
+                                    <li>Dependents will have there separate complete insured limit {{ result.jubilee_104755.insured_amount|default:0|intcomma }}/-.</li>
+                                    <li>Dependents can have all the benefits the employee has related to insurance.</li>
+                                    <li>Each Dependent addition charges will be {{ result.jubilee_104755.amount|default:0|intcomma }}/-.</li>
+                                    {% if result.gender == 'Male' %}
+                                        <li>Maternity Charges will be added as per spouse (female) age see the table .</li>
+                                        <li>Maternity benefits would be additional amount of {{ result.jubilee_104755.maternity.normal|default:0|intcomma }}/- for normal delivery and {{ result.jubilee_104755.maternity.operate|default:0|intcomma }}/- for operate.</li>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% if result.gender == 'Male' %}
+                            <div class="column_distribution" style="border-radius: 20px; margin-left: 20px; width: 50%;">
+                                <div class="row_distribution">
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th style="color: black;">Age</th>
+                                            <th style="color: black;">Premium</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for inner_key, inner_value in result.jubilee_104755.maternity_premium.items %}
+                                            <tr>
+                                                <td>{{ inner_key }}</td>
+                                                <td>{{ inner_value|default:0|intcomma }}/-</td>
+                                            <tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <br>
+            {% endif %}
+        {% endif %}
+        <div class="row_distribution" style="justify-content: center; align-self: center; flex-wrap: wrap;">
+            <button style="margin: 20px;" onclick="window.location.href='https://indus.rubick.org/insurance/Jubilee_duplicate_card.php'">Duplicate Insurance Card</button>
+            <button style="margin: 20px;" onclick="window.location.href='https://indus.rubick.org/insurance/Jubilee_approval.php'">Test Approval</button>
+            <button style="margin: 20px;" id="tests" onclick="toggleTests()">Covered Tests</button>
+            <button style="margin: 20px;" onclick="window.location.href='https://django.rubick.org/jubilee_insurance/'">Self Claim Form</button>
+            {% if 'dependents' in result %}
+                <button style="margin: 20px;" onclick="window.location.href='https://django.rubick.org/jubilee_insurance/dependent_form/'">Dependent Claim Form</button>
+            {% endif %}
+            <button style="margin: 20px;" onclick="window.location.href='https://www.jubileelife.com/wp-content/uploads/2020/12/Consolidated-PPN-02-12-2020.pdf'">Hospital List</button>
+            <button style="margin: 20px;" onclick="openPDF()">Add Dependent</button>
+        </div>
+        <div id="tests_coverd" style="display: none;">
+            <div class="row_distribution">
+                <div class="column_distribution" style="border-radius: 20px; padding: 20px; width: 50%;">
+                    <div class="row_distribution">
+                        <h3 style="text-decoration: underline;">Outpatient Cover</h3><br>
+                    </div>
+                    <div class="row_distribution">
+                        <div class="employee_details" style="margin-right: 100px;">
+                            <li>Endoscopy</li>
+                            <li>Gastroscopy</li>
+                            <li>MRI</li>
+                            <li>Angiography</li>
+                            <li>Thallium Scan</li>
+                            <li>Colonoscopy</li>
+                            <li>Echo</li>
+                            <li>ETT</li>
+                            <li>CT Scan</li>
+                            <li>Mammography</li>
+                        </div>
+                        <div class="employee_details">
+                            <li>Barium Meal</li>
+                            <li>Barium Enema etc.</li>
+                            <li>Biopsy</li>
+                            <li>Carotid Doppler</li>
+                            <li>EEG</li>
+                            <li>EMG</li>
+                            <li>HAULTER's Monitoring etc.</li>
+                            <li>Pet Scan</li>
+                            <li>FNA</li>
+                            <li>NCS</li>
+                        </div>
+                    </div>
+                </div>
+                <div class="column_distribution" style="border-radius: 20px; padding: 20px; margin-left: 20px; width: 50%;">
+                    <div class="row_distribution">
+                        <h3 style="text-decoration: underline;">Day Care Surgical Procedure</h3><br>
+                    </div>
+                    <div class="row_distribution">
+                        <div class="employee_details" style="margin-right: 100px;">
+                            <li>Lithotripsy (Kidney Stone)</li>
+                            <li>Dilation & Curettage</li>
+                            <li>Tonsillectomy</li>
+                            <li>Adenoidectomy</li>
+                            <li>Varicose Veins</li>
+                            <li>Cataract Surgery</li>
+                            <li>Chemotherapy</li>
+                            <li>Radiotherapy</li>
+                            <li>Dialysis</li>
+                            <li>Incision & Drainage etc.</li>
+                        </div>
+                        <div class="employee_details">
+                            <li>Sclerotherapy</li>
+                            <li>EVBL</li>
+                            <li>Arthroscopy</li>
+                            <li>PRP</li>
+                            <li>Yag Laser</li>
+                            <li>Zi Avastia / Inj Lucenta</li>
+                            <li>BAWO</li>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if result.count == 2 %}
+            <div class="todo" style="background: linear-gradient(90deg, rgba(30,140,153,1) 25%, rgba(255,255,255,1) 75%); margin-top: 20px; color: white; width: 100%; padding: 0 !important;">
+            <img src="{% static 'efu_logo2.png' %}" alt="left Image" width="200" height="100" style="margin-left: 20px; padding: 10px;">
+        </div>
+        <div class="set_jubilee_name_info">
+            <div class="header-logo-right"  style="font-size: 15px;">
+                Expiry Date: 30-Jun-2024
+            </div>
+        </div>
+        <h1>2- EFU Health Insurance</h1>
+        <div class="set_jubilee_name_info">
+            <div class="header-logo-left" style="font-size: 25px; background-color: rgba(30,140,153,1); width: 300px; padding: 20px; border-radius: 12px; color: white;">
+                Covered Amount: {{ result.efu.insured_amount|default:0|intcomma }}/-
+            </div>
+            <div class="header-logo-right"  style="font-size: 25px; background-color: rgba(30,140,153,1); width: 300px; padding: 20px; border-radius: 12px; color: white;">
+                Premium Paid: {{ result.efu.amount|default:0|intcomma }}/-
+            </div>
+        </div>
+        <h3>Guidelines</h3>
+        <div>
+            <div class="row_distribution">
+                <div class="row_distribution" style="border-radius: 20px;">
+                    <div class="employee_details" style="color: grey;">
+                        <li>In the event of a road accident resulting in complete bed rest, you will receive full salary support up to 25,000/-. If your salary is lower than 25,000/-, you will receive your entire salary. However, if your salary exceeds 25,000/-, the support will be capped at 25,000/-. This coverage remains applicable from minimum 15 days to maximum 3 months.</li>
+                        <li>In the unfortunate event of death or permanent disability, you or your family will be eligible for the coverage amount if the deceased one age is below 65 years. For claims and further assistance, please contact our dedicated Accounts Department</li>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+        {% endif %}
+        {% if result.count == 3 %}
+            <div class="todo" style="background: linear-gradient(90deg, rgba(30,140,153,1) 25%, rgba(255,255,255,1) 75%); margin-top: 20px; color: white; width: 100%; padding: 0 !important;">
+            <img src="{% static 'efu_logo2.png' %}" alt="left Image" width="200" height="100" style="margin-left: 20px; padding: 10px;">
+        </div>
+        <div class="set_jubilee_name_info">
+            <div class="header-logo-right"  style="font-size: 15px;">
+                Expiry Date: 30-Jun-2024
+            </div>
+        </div>
+        <h1>2- EFU Health Insurance</h1>
+        <div class="set_jubilee_name_info">
+            <div class="header-logo-left" style="font-size: 25px; background-color: rgba(30,140,153,1); width: 300px; padding: 20px; border-radius: 12px; color: white;">
+                Covered Amount: {{ result.efu.insured_amount|default:0|intcomma }}/-
+            </div>
+            <div class="header-logo-right"  style="font-size: 25px; background-color: rgba(30,140,153,1); width: 300px; padding: 20px; border-radius: 12px; color: white;">
+                Premium Paid: {{ result.efu.amount|default:0|intcomma }}/-
+            </div>
+        </div>
+        <h3>Guidelines</h3>
+        <div>
+            <div class="row_distribution">
+                <div class="row_distribution" style="border-radius: 20px;">
+                    <div class="employee_details" style="color: grey;">
+                        <li>In the event of a road accident resulting in complete bed rest, you will receive full salary support up to 25,000/-. If your salary is lower than 25,000/-, you will receive your entire salary. However, if your salary exceeds 25,000/-, the support will be capped at 25,000/-. This coverage remains applicable from minimum 15 days to maximum 3 months.</li>
+                        <li>In the unfortunate event of death or permanent disability, you or your family will be eligible for the coverage amount if the deceased one age is below 65 years. For claims and further assistance, please contact our dedicated Accounts Department</li>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h1>3- EFU Death Insurance</h1>
+        <div class="set_jubilee_name_info">
+            <div class="header-logo-left" style="font-size: 25px; background-color: rgba(30,140,153,1); width: 300px; padding: 20px; border-radius: 12px; color: white;">
+                Covered Amount: Full Gross Salary
+            </div>
+            <div class="header-logo-right"  style="font-size: 25px; background-color: rgba(30,140,153,1); width: 300px; padding: 20px; border-radius: 12px; color: white;">
+                Premium Paid: 3,571/-
+            </div>
+        </div>
+        <h3>Guidelines</h3>
+        <div>
+            <div class="row_distribution">
+                <div class="row_distribution" style="border-radius: 20px;">
+                    <div class="employee_details" style="color: grey;">
+                        <li>In the unfortunate event of death, your family will receive the coverage amount per month as long for 3 years upto 65th birhday (if deceased one died at the age of 64 then fmaily will have only 1 year benefit). For claims and further assistance, please contact our dedicated Accounts Department</li>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+        {% endif %}
+        <div class="form-group" style="display: none">
+            <label for="claimant_name">Claimant Name:<span class="required">*</span></label>
+            <input type="text" id="claimant_name" name="claimant_name" value='{{ result.jubilee_insured_id }}' readonly>
+        </div>
+    </div>
+    <footer>
+         <p>@ Usman Mustafa Khawar</p>
+    <div style="margin-bottom: 20px;">
+        <a href="https://github.com/xerone9" style="text-decoration: none; color: #000000;">
+            <img src="{% static 'git_logo.png' %}" alt="GitHub Icon" style="width: 30px; height: 30px; vertical-align: middle; margin-left: 10px; margin-right: 10px;">
+        </a>
+        <a href="https://www.linkedin.com/in/usman-mustafa-khawar-41374a234/" style="text-decoration: none; color: #000000;">
+            <img src="{% static 'linkedin_logo.png' %}" alt="Linkedin Icon" style="width: 30px; height: 30px; vertical-align: middle;  margin-left: 10px; margin-right: 10px;">
+        </a>
+        <a href="https://softwares.rubick.org/" style="text-decoration: none; color: #000000;">
+            <img src="{% static 'web_logo.png' %}" alt="Web Icon" style="width: 30px; height: 30px; vertical-align: middle;  margin-left: 10px; margin-right: 10px;">
+        </a>
+        <a href="https://www.upwork.com/freelancers/~01e2b4984cd54db890" style="text-decoration: none; color: #000000;">
+            <img src="{% static 'upwork_logo.png' %}" alt="Upwork Icon" style="width: 30px; height: 30px; vertical-align: middle; margin-left: 10px; margin-right: 10px;">
+        </a>
+        <a href="https://www.youtube.com/channel/UCbczhEOorBjQUwFbkUG9AGg" style="text-decoration: none; color: #000000;">
+            <img src="{% static 'youtube_logo.png' %}" alt="YouTube Icon" style="width: 30px; height: 30px; vertical-align: middle; margin-left: 10px; margin-right: 10px;">
+        </a>
+    </div>
+    </footer>
+    <script>
+        function toggleTests() {
+          var testsDiv = document.getElementById('tests_coverd');
+
+          if (testsDiv.style.display === 'none' || testsDiv.style.display === '') {
+            testsDiv.style.display = 'block';
+          } else {
+            testsDiv.style.display = 'none';
+          }
+        }
+      </script>
+      <script>
+    function openPDF() {
+        // Specify the path to your PDF file
+        var pdfPath = '{% static "add_dependent_form.pdf" %}';
+
+        // Open the PDF in a new window or tab
+        window.open(pdfPath, '_blank');
+    }
+</script>
+</body>
+</html>
