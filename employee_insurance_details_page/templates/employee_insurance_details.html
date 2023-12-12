@@ -3,6 +3,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <script>
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        // Redirect to a mobile-friendly message or another page
+        var pdfPath = '{% static "mobile_message.html" %}';
+        window.open(pdfPath);
+    }
+</script>
+<script>
     function toggleDivs() {
             var div1 = document.getElementById('div1');
             var div2 = document.getElementById('div2');
@@ -437,6 +444,8 @@
                             <span style="font-family: cursive; color: white;">{{ result.father_name }}</span><br>
                             <span style="font-family: 'Times New Roman', Times, serif;">Employee NIC:</span>
                             <span style="font-family: cursive; color: white;">{{ result.nic }}</span><br>
+                            <span style="font-family: 'Times New Roman', Times, serif;">Gender:</span>
+                            <span style="font-family: cursive; color: white;">{{ result.gender }}</span><br>
                             <span style="font-family: 'Times New Roman', Times, serif;">Marital Status:</span>
                             <span style="font-family: cursive; color: white;">{{ result.martial_status }}</span><br>
                             <span style="font-family: 'Times New Roman', Times, serif;">Date Of Birth:</span>
@@ -455,6 +464,8 @@
                             <span style="font-family: cursive; color: red;">{{ result.total_charges|default:0|intcomma }}/-</span><br>
                             <span style="font-family: 'Times New Roman', Times, serif;">Indus Paid Premium:</span>
                             <span style="font-family: cursive; color: white;">{{ result.premium.indus_pay|default:0|floatformat:0|intcomma }}/-</span><br>
+                            <span style="font-family: 'Times New Roman', Times, serif;">Employee Paid Premium:</span>
+                            <span style="font-family: cursive; color: blue;">{{ result.premium.employee_pay|default:0|floatformat:0|intcomma }}/-</span><br>
                         </div>
                     </div>
                 </div>
@@ -651,15 +662,17 @@
             {% endif %}
         {% endif %}
         <div class="row_distribution" style="justify-content: center; align-self: center; flex-wrap: wrap;">
-            <button style="margin: 20px;" onclick="window.location.href='https://indus.rubick.org/insurance/Jubilee_duplicate_card.php'">Duplicate Insurance Card</button>
-            <button style="margin: 20px;" onclick="window.location.href='https://indus.rubick.org/insurance/Jubilee_approval.php'">Test Approval</button>
+            <button style="margin: 20px;" onclick="window.open('https://indus.rubick.org/insurance/Jubilee_duplicate_card.php', '_blank')">Duplicate Insurance Card</button>
+            <button style="margin: 20px;" onclick="window.open('https://indus.rubick.org/insurance/Jubilee_approval.php', '_blank')">Test Approval</button>
             <button style="margin: 20px;" id="tests" onclick="toggleTests()">Covered Tests</button>
-            <button style="margin: 20px;" onclick="window.location.href='https://django.rubick.org/jubilee_insurance/'">Self Claim Form</button>
+            <button style="margin: 20px;" onclick="window.open('https://django.rubick.org/jubilee_insurance/', '_blank')">Self Claim Form</button>
             {% if 'dependents' in result %}
-                <button style="margin: 20px;" onclick="window.location.href='https://django.rubick.org/jubilee_insurance/dependent_form/'">Dependent Claim Form</button>
+                <button style="margin: 20px;" onclick="window.open('https://django.rubick.org/jubilee_insurance/dependent_form/', '_blank')">Dependent Claim Form</button>
             {% endif %}
-            <button style="margin: 20px;" onclick="window.location.href='https://www.jubileelife.com/wp-content/uploads/2020/12/Consolidated-PPN-02-12-2020.pdf'">Hospital List</button>
-            <button style="margin: 20px;" onclick="openPDF()">Add Dependent</button>
+            <button style="margin: 20px;" onclick="window.open('https://www.jubileelife.com/wp-content/uploads/2020/12/Consolidated-PPN-02-12-2020.pdf', '_blank')">Hospital List</button>
+            {% if result.martial_status == 'Married' %}
+                <button style="margin: 20px;" onclick="openPDF()">Add Dependent</button>
+            {% endif %}
         </div>
         <div id="tests_coverd" style="display: none;">
             <div class="row_distribution">

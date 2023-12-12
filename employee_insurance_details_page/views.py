@@ -105,7 +105,7 @@ MATERNITY_CHARGES = {
         40: 11844,
         45: 1668
     },
-    "b": {
+    "B": {
         25: 46643,
         30: 35448,
         35: 21683,
@@ -139,7 +139,12 @@ def get_age_maternity_premium(plan, age):
     age = current_date.year - dob_datetime.year - (
                 (current_date.month, current_date.day) < (dob_datetime.month, dob_datetime.day))
 
-    get_maternity_premium = max(key for key in MATERNITY_CHARGES[plan].keys() if key <= age)
+    keys_for_plan = MATERNITY_CHARGES.get(plan, {})
+    min_age = min(keys_for_plan.keys())
+
+    get_maternity_premium = max((key for key in keys_for_plan.keys() if key <= age), default=min_age)
+
+    # get_maternity_premium = max(key for key in MATERNITY_CHARGES[plan].keys() if key <= age)
 
     return MATERNITY_CHARGES[plan][get_maternity_premium]
 
